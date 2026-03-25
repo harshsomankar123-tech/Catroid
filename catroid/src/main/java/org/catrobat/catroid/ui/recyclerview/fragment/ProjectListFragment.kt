@@ -67,6 +67,7 @@ import org.catrobat.catroid.ui.fragment.ProjectOptionsFragment
 import org.catrobat.catroid.ui.recyclerview.adapter.ProjectAdapter
 import org.catrobat.catroid.ui.recyclerview.adapter.RVAdapter
 import org.catrobat.catroid.ui.recyclerview.adapter.multiselection.MultiSelectionManager
+import org.catrobat.catroid.ui.recyclerview.dialog.LauncherIconPreviewDialog
 import org.catrobat.catroid.ui.recyclerview.viewholder.CheckableViewHolder
 import org.catrobat.catroid.ui.runtimepermissions.RequiresPermissionTask
 import org.catrobat.catroid.utils.ToastUtil
@@ -499,10 +500,17 @@ class ProjectListFragment(
                 R.id.rename -> showRenameDialog(item)
                 R.id.delete -> deleteItems(itemList)
                 R.id.project_options -> showProjectOptionsFragment(item)
+                R.id.launcher_icon_preview -> showLauncherIconPreviewDialog(item)
             }
             true
         }
         popupMenu.show()
+    }
+
+    private fun showLauncherIconPreviewDialog(item: ProjectData?) {
+        item ?: return
+        val dialog = LauncherIconPreviewDialog.newInstance(item)
+        dialog.show(childFragmentManager, "LauncherIconPreviewDialog")
     }
 
     private fun showProjectOptionsFragment(item: ProjectData?) {
