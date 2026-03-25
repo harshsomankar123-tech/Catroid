@@ -491,6 +491,9 @@
     <string formatted="false" name="rename_nfctag_dialog">Rename NFC tag</string>
     <string formatted="false" name="rename_data_dialog">Rename</string>
 
+    <string name="launcher_icon_preview">Launcher icon preview</string>
+
+
     <!-- New Script Group Dialog -->
     <string formatted="false" name="new_group">New group</string>
     <string formatted="false" name="default_group_name">Group</string>
