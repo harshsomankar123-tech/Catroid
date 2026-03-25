@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/material_design_spacing_large">
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/launcher_icon_view"
+        android:layout_width="160dp"
+        android:layout_height="160dp"
+        android:layout_marginTop="@dimen/material_design_spacing_large"
+        android:scaleType="centerCrop"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:shapeAppearanceOverlay="@style/ShapeAppearance.Catroid.AppIcon"
+        tools:src="@drawable/catrobat" />
+
+    <TextView
+        android:id="@+id/project_name_view"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/material_design_spacing_large"
+        android:gravity="center"
+        android:textAppearance="?attr/textAppearanceHeadline6"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/launcher_icon_view"
+        tools:text="Project Name" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/ok_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/material_design_spacing_large"
+        android:layout_marginBottom="@dimen/material_design_spacing_large"
+        android:text="@android:string/ok"
+        android:backgroundTint="@color/action_button"
+        android:textColor="@color/solid_white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/project_name_view" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
