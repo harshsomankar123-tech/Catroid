@@ -101,7 +101,7 @@ jobs:
         uses: actions/upload-artifact@v4
         if: always() # IMPORTANT: Upload reports regardless of status
         with:
-          name: test-reports-${{inputs.calling-job}}
+          name: test-reports-${{inputs.calling-job}}-${{github.run_id}}
           path: catroid/build/reports/androidTests/connected/debug/flavors/catroid
           overwrite: true
 
@@ -109,6 +109,6 @@ jobs:
         uses: actions/upload-artifact@v4
         if: always() # IMPORTANT: Upload reports regardless of status
         with:
-          name: coverage-report-${{inputs.calling-job}}
+          name: coverage-report-${{inputs.calling-job}}-${{github.run_id}}
           path: catroid/build/reports/coverage/androidTest/catroid/debug/connected
           overwrite: true
