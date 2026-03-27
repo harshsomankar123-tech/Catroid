@@ -1,3 +1,25 @@
+/*
+ * Catroid: An on-device visual programming system for Android devices
+ * Copyright (C) 2010-2025 The Catrobat Team
+ * (<http://developer.catrobat.org/credits>)
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * An additional term exception under section 7 of the GNU Affero
+ * General Public License, version 3, is available at
+ * http://developer.catrobat.org/license_additional_term
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.catrobat.catroid.ui
 
 import android.content.Context
@@ -14,10 +36,10 @@ class ProjectLauncherIconProvider(
 ) {
     companion object {
         private const val CACHE_SIZE = 10
-        private val cache = object : LinkedHashMap<String, CacheEntry>(CACHE_SIZE, 0.75f, true) {
-            override fun removeEldestEntry(eldest: MutableMap.MutableEntry<String, CacheEntry>?): Boolean {
-                return size > CACHE_SIZE
-            }
+        private const val LOAD_FACTOR = 0.75f
+        private val cache = object : LinkedHashMap<String, CacheEntry>(CACHE_SIZE, LOAD_FACTOR, true) {
+            override fun removeEldestEntry(eldest: MutableMap.MutableEntry<String, CacheEntry>?): Boolean =
+                size > CACHE_SIZE
         }
 
         data class CacheEntry(val bitmap: Bitmap, val lastModified: Long)
