@@ -103,6 +103,7 @@ jobs:
         with:
           name: test-reports-${{inputs.calling-job}}
           path: catroid/build/reports/androidTests/connected/debug/flavors/catroid
+          overwrite: true
 
       - name: Upload Coverage Report
         uses: actions/upload-artifact@v4
@@ -110,3 +111,4 @@ jobs:
         with:
           name: coverage-report-${{inputs.calling-job}}
           path: catroid/build/reports/coverage/androidTest/catroid/debug/connected
+          overwrite: true
