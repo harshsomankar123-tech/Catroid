@@ -117,4 +117,37 @@ public class ParserFunctionTest {
 		FormulaEditorTestUtil.testDoubleParameterFunction(Functions.ARCTAN2, InternTokenType.NUMBER, "0",
 				InternTokenType.NUMBER, "0", 0.0, 180.0, null);
 	}
+
+	@Test
+	public void testMissingClosingBracket() {
+		List<InternToken> internTokenList = new LinkedList<>();
+		internTokenList.add(new InternToken(InternTokenType.FUNCTION_NAME, Functions.PI.name()));
+		internTokenList.add(new InternToken(InternTokenType.FUNCTION_PARAMETERS_BRACKET_OPEN, "("));
+		internTokenList.add(new InternToken(InternTokenType.NUMBER, "0"));
+		internTokenList.add(new InternToken(InternTokenType.OPERATOR, "+")); // Unexpected token triggers error
+		
+		InternFormulaParser internParser = new InternFormulaParser(internTokenList);
+		FormulaElement parseTree = internParser.parseFormula(null);
+		
+		assertNull(parseTree);
+		assertEquals(3, internParser.getErrorTokenIndex());
+	}
+
+	@Test
+	public void testThreeParameters() {
+		List<InternToken> internTokenList = new LinkedList<>();
+		internTokenList.add(new InternToken(InternTokenType.FUNCTION_NAME, "RAND"));
+		internTokenList.add(new InternToken(InternTokenType.FUNCTION_PARAMETERS_BRACKET_OPEN, "("));
+		internTokenList.add(new InternToken(InternTokenType.NUMBER, "0"));
+		internTokenList.add(new InternToken(InternTokenType.FUNCTION_PARAMETER_DELIMITER, ","));
+		internTokenList.add(new InternToken(InternTokenType.NUMBER, "1"));
+		internTokenList.add(new InternToken(InternTokenType.FUNCTION_PARAMETER_DELIMITER, ","));
+		internTokenList.add(new InternToken(InternTokenType.NUMBER, "2"));
+		internTokenList.add(new InternToken(InternTokenType.FUNCTION_PARAMETERS_BRACKET_CLOSE, ")"));
+		
+		FormulaElement parseTree = new InternFormulaParser(internTokenList).parseFormula(null);
+		
+		assertNotNull(parseTree);
+		assertEquals(1, parseTree.additionalChildren.size()); 
+	}
 }

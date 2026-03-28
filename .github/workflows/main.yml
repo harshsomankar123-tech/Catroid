@@ -28,7 +28,6 @@ env:
 jobs:
 
   repo-check:
-    if: ${{ github.repository == 'Catrobat/Catroid' }}
     # set --env GITHUB_REPOSITORY=Catrobat/Catroid for local runs in act since env.ACT is not accessible here
     name: Repo Check
     runs-on: ubuntu-latest
