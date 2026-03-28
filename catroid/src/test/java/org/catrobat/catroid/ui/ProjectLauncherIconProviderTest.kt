@@ -11,14 +11,12 @@ import org.catrobat.catroid.utils.ImageEditing
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
-import org.junit.Assert.assertNotSame
 import org.junit.Assert.assertSame
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TemporaryFolder
 import java.io.File
-import kotlin.math.max
 
 class ProjectLauncherIconProviderTest {
 
