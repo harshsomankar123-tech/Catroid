@@ -311,7 +311,7 @@ class ProjectLauncherIconProviderTest {
     }
 
     @Test
-    fun testProviderWhenBitmapReturnedIsNullExplicitly() {
+    fun testProviderReturnsFallbackWhenBitmapReturnedIsNullExplicitly() {
         val manualScreenshot = File(projectDir, Constants.SCREENSHOT_MANUAL_FILE_NAME)
         manualScreenshot.writeText("fake image content")
 
@@ -326,5 +326,48 @@ class ProjectLauncherIconProviderTest {
         val result = provider.getLauncherIcon(projectDir)
 
         assertSame(fallbackBitmap, result)
+    }
+
+    @Test
+    fun testScalingAndCroppingProducesExpectedSize() {
+        val manualScreenshot = File(projectDir, Constants.SCREENSHOT_MANUAL_FILE_NAME)
+        manualScreenshot.writeText("fake image")
+
+        val expectedSize = 256
+        val providerSmall = ProjectLauncherIconProvider(context, expectedSize)
+        
+        val mockBitmap = mockk<Bitmap>()
+        every { mockBitmap.width } returns expectedSize
+        every { mockBitmap.height } returns expectedSize
+        
+        every { 
+            ImageEditing.getScaledBitmapFromPath(any(), eq(expectedSize), eq(expectedSize), any(), any()) 
+        } returns mockBitmap
+
+        val result = providerSmall.getLauncherIcon(projectDir)
+        
+        assertEquals(expectedSize, result.width)
+        assertEquals(expectedSize, result.height)
+    }
+
+    @Test
+    fun testProviderDoesNotCrashOnOddDimensions() {
+        val manualScreenshot = File(projectDir, Constants.SCREENSHOT_MANUAL_FILE_NAME)
+        manualScreenshot.writeText("fake image")
+
+        // Mock an odd-sized bitmap being returned from path
+        val mockBitmap = mockk<Bitmap>()
+        every { mockBitmap.width } returns 101
+        every { mockBitmap.height } returns 79
+        
+        every { 
+            ImageEditing.getScaledBitmapFromPath(any(), any(), any(), any(), any()) 
+        } returns mockBitmap
+
+        // This should not throw any exception
+        val result = provider.getLauncherIcon(projectDir)
+        
+        assertNotNull(result)
+        assertEquals(101, result.width)
     }
 }
