@@ -65,7 +65,7 @@ class ProjectLauncherIconProvider(
 
     private fun createLauncherIcon(projectDir: File): Bitmap {
         val screenshotFile = findScreenshotFile(projectDir)
-        val bitmap = if (screenshotFile != null && screenshotFile.exists()) {
+        val bitmap = if (screenshotFile != null) {
             try {
                 ImageEditing.getScaledBitmapFromPath(
                     screenshotFile.absolutePath,
