@@ -34,6 +34,7 @@ import org.catrobat.catroid.content.bricks.SetXBrick;
 import org.catrobat.catroid.content.bricks.UserDefinedBrick;
 import org.catrobat.catroid.content.bricks.UserDefinedReceiverBrick;
 import org.catrobat.catroid.test.utils.TestUtils;
+import org.catrobat.catroid.uiespresso.content.brick.utils.BrickDataInteractionWrapper;
 import org.catrobat.catroid.testsuites.annotations.Cat;
 import org.catrobat.catroid.testsuites.annotations.Level;
 import org.catrobat.catroid.ui.SpriteActivity;
@@ -148,7 +149,12 @@ public class FormulaEditorVariableScopeTest {
 
 	@Test
 	public void testUserDefinedInputOnlyInCorrespondingDefineScript() {
-		openFormulaEditorOnBrickField(R.id.brick_set_x_edit_text);
+		BrickDataInteractionWrapper.onBrickAtPosition(4)
+				.onFormulaTextField(R.id.brick_set_x_edit_text)
+				.perform(click());
+
+		onFormulaEditor()
+				.performOpenDataFragment();
 
 		onRecyclerView().atPosition(0).onChildView(R.id.headline)
 				.check(doesNotExist());
