@@ -64,7 +64,9 @@ class CatrobatTestRunner {
     var assetName: String = ""
 
     companion object {
-        private const val TEST_ASSETS_ROOT = "catrobatTests"
+        private val TEST_ASSETS_ROOT: String
+            get() = InstrumentationRegistry.getInstrumentation()
+                .arguments.getString("catrobatTestAssetsRoot", "catrobatTests")!!
         private const val TIMEOUT = 10_000
 
         @JvmStatic
