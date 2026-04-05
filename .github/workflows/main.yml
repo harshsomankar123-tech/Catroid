@@ -169,6 +169,7 @@ jobs:
     with:
       gradle-test-config: org.catrobat.catroid.catrobattestrunner.CatrobatTestRunner
       calling-job: testrunner-tests
+      use-catrobat-language-repo: true
 
   quarantined-tests:
     needs: repo-check
@@ -185,3 +186,100 @@ jobs:
     with:
       gradle-test-config: org.catrobat.catroid.testsuites.UiEspressoRtlTestSuite
       calling-job: rtl-tests
+
+  catrobat-language-system-tests:
+    needs: repo-check
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    name: CatrobatLanguage System Tests
+    uses: ./.github/workflows/emulated_tests.yml
+    with:
+      gradle-test-config: org.catrobat.catroid.testsuites.CatrobatLanguageSystemTestSuite
+      calling-job: catrobat-language-system-tests
+      use-catrobat-language-repo: true
+
+  sonarqube:
+    needs: [unit-tests, instrumented-unit-tests, testrunner-tests, quarantined-tests, rtl-tests]
+    if: always() && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository)
+    name: SonarQube Analysis
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
+      pull-requests: write
+      checks: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup JDK ${{ env.JAVA_VERSION }}
+        uses: actions/setup-java@v4
+        with:
+          distribution: "temurin"
+          java-version: ${{ env.JAVA_VERSION }}
+          cache: gradle
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Set up Android SDK
+        if: ${{ env.ACT }} # Only run on local act setups, as GitHub Actions provides the Android SDK on Ubuntu
+        uses: android-actions/setup-android@v2
+
+      - name: Download Unit Test Coverage XML
+        uses: actions/download-artifact@v4
+        with:
+          name: coverage-xml-unit-tests
+          path: coverage-reports/coverage-xml-unit-tests
+        continue-on-error: true
+
+      - name: Download Instrumented Unit Test Coverage XML
+        uses: actions/download-artifact@v4
+        with:
+          name: coverage-xml-instrumented-unit-tests
+          path: coverage-reports/coverage-xml-instrumented-unit-tests
+        continue-on-error: true
+
+      - name: Download Testrunner Test Coverage XML
+        uses: actions/download-artifact@v4
+        with:
+          name: coverage-xml-testrunner-tests
+          path: coverage-reports/coverage-xml-testrunner-tests
+        continue-on-error: true
+
+      - name: Download Quarantined Test Coverage XML
+        uses: actions/download-artifact@v4
+        with:
+          name: coverage-xml-quarantined-tests
+          path: coverage-reports/coverage-xml-quarantined-tests
+        continue-on-error: true
+
+      - name: Download RTL Test Coverage XML
+        uses: actions/download-artifact@v4
+        with:
+          name: coverage-xml-rtl-tests
+          path: coverage-reports/coverage-xml-rtl-tests
+        continue-on-error: true
+
+      - name: Compile Sources
+        run: ./gradlew compileCatroidDebugSources
+
+      - name: Run SonarQube Analysis
+        continue-on-error: true
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          JACOCO_PATHS: >-
+            coverage-reports/coverage-xml-unit-tests/report.xml,
+            coverage-reports/coverage-xml-instrumented-unit-tests/report.xml,
+            coverage-reports/coverage-xml-testrunner-tests/report.xml,
+            coverage-reports/coverage-xml-quarantined-tests/report.xml,
+            coverage-reports/coverage-xml-rtl-tests/report.xml
+        run: |
+          # Strip whitespace/newlines from the paths string (YAML >- folds newlines to spaces)
+          CLEAN_PATHS=$(echo "$JACOCO_PATHS" | tr -d ' \n' | sed 's/,$//')
+          ./gradlew sonar --info \
+            -Dsonar.token=$SONAR_TOKEN \
+            -Dsonar.projectKey=Catrobat_Catroid \
+            -Dsonar.organization=catrobat \
+            -Dsonar.coverage.jacoco.xmlReportPaths="$CLEAN_PATHS"
