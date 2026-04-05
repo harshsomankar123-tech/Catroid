@@ -10,6 +10,11 @@ on:
       calling-job:
         required: true
         type: string
+      use-catrobat-language-repo:
+        description: "When true, clone the CatrobatLanguage repo and use its test files as the test assets"
+        required: false
+        type: boolean
+        default: false
 
 env:
   # Java version for the JDK setup
@@ -22,6 +27,39 @@ jobs:
     steps:
       - name: checkout
         uses: actions/checkout@v4
+
+      - name: Fetch CatrobatLanguage test assets
+        if: ${{ inputs.use-catrobat-language-repo }}
+        run: |
+          echo "::group::Cloning CatrobatLanguage repo (sparse checkout)"
+          git clone --depth 1 --filter=blob:none --sparse \
+            https://github.com/Catrobat/CatrobatLanguage.git \
+            /tmp/CatrobatLanguage
+          cd /tmp/CatrobatLanguage
+          git sparse-checkout set catrobatLanguageTest catrobatTestRunnerTests
+          echo "::endgroup::"
+
+          echo "::group::Copying test assets into Catroid androidTest assets"
+          # Copy language test files (overwrite bundled ones)
+          ASSETS_DIR="${GITHUB_WORKSPACE}/catroid/src/androidTest/assets"
+
+          # Sync catrobatLanguageTest -> catrobatTests
+          rm -rf "${ASSETS_DIR}/catrobatTests"
+          cp -r /tmp/CatrobatLanguage/catrobatLanguageTest "${ASSETS_DIR}/catrobatTests"
+          echo "Copied catrobatLanguageTest -> catrobatTests"
+
+          # Sync catrobatTestRunnerTests -> catrobatTestRunnerTests
+          rm -rf "${ASSETS_DIR}/catrobatTestRunnerTests"
+          cp -r /tmp/CatrobatLanguage/catrobatTestRunnerTests "${ASSETS_DIR}/catrobatTestRunnerTests"
+          echo "Copied catrobatTestRunnerTests -> catrobatTestRunnerTests"
+
+          echo "Test asset counts:"
+          find "${ASSETS_DIR}/catrobatTests" -name "*.catrobat" | wc -l
+          find "${ASSETS_DIR}/catrobatTestRunnerTests" -name "*.catrobat" | wc -l
+          echo "::endgroup::"
+
+          # Cleanup
+          rm -rf /tmp/CatrobatLanguage
 
       - name: Setup JDK ${{ env.JAVA_VERSION }}
         uses: actions/setup-java@v4
