@@ -29,6 +29,8 @@ import org.catrobat.catroid.content.Project;
 import org.catrobat.catroid.content.Scope;
 import org.catrobat.catroid.content.Sprite;
 import org.catrobat.catroid.formulaeditor.FormulaElement;
+import org.catrobat.catroid.formulaeditor.evaluation.FormulaEvaluator;
+
 import org.catrobat.catroid.formulaeditor.Functions;
 import org.catrobat.catroid.formulaeditor.InternFormulaParser;
 import org.catrobat.catroid.formulaeditor.InternToken;
@@ -419,6 +421,6 @@ public class ParserTestStringFunctions {
 		assertNotNull(parseTree);
 		assertEquals(String.valueOf((firstParameter + secondParameter)
 						.charAt((firstParameter + secondParameter).length() - 1)),
-				parseTree.interpretRecursive(testScope));
+				FormulaEvaluator.interpretRecursive(parseTree, testScope));
 	}
 }

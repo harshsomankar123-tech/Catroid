@@ -31,6 +31,8 @@ import org.catrobat.catroid.content.bricks.Brick;
 import org.catrobat.catroid.formulaeditor.Formula;
 import org.catrobat.catroid.formulaeditor.Formula.StringProvider;
 import org.catrobat.catroid.formulaeditor.FormulaElement;
+import org.catrobat.catroid.formulaeditor.evaluation.FormulaEvaluator;
+
 import org.catrobat.catroid.formulaeditor.FormulaElement.ElementType;
 import org.catrobat.catroid.formulaeditor.Functions;
 import org.catrobat.catroid.formulaeditor.InternFormulaParser;
@@ -155,7 +157,7 @@ public class FormulaTest {
 		FormulaElement parseTree = internParser.parseFormula(scope);
 
 		assertNotNull(parseTree);
-		assertEquals(-1d, parseTree.interpretRecursive(scope));
+		assertEquals(-1d, FormulaEvaluator.interpretRecursive(parseTree, scope));
 		internTokenList.clear();
 
 		Formula formula = new Formula(parseTree);
@@ -171,7 +173,7 @@ public class FormulaTest {
 		FormulaElement parseTree = internParser.parseFormula(scope);
 
 		assertNotNull(parseTree);
-		assertEquals(-1d, parseTree.interpretRecursive(scope));
+		assertEquals(-1d, FormulaEvaluator.interpretRecursive(parseTree, scope));
 		internTokenList.clear();
 
 		Formula formula = new Formula(parseTree);
@@ -189,7 +191,7 @@ public class FormulaTest {
 		FormulaElement parseTree = internParser.parseFormula(scope);
 
 		assertNotNull(parseTree);
-		assertEquals(-2d, parseTree.interpretRecursive(scope));
+		assertEquals(-2d, FormulaEvaluator.interpretRecursive(parseTree, scope));
 		internTokenList.clear();
 
 		Formula formula = new Formula(parseTree);
@@ -207,7 +209,7 @@ public class FormulaTest {
 		FormulaElement parseTree = internParser.parseFormula(null);
 
 		assertNotNull(parseTree);
-		assertEquals(1d, parseTree.interpretRecursive(null));
+		assertEquals(1d, FormulaEvaluator.interpretRecursive(parseTree, null));
 		internTokenList.clear();
 
 		Formula formula = new Formula(parseTree);

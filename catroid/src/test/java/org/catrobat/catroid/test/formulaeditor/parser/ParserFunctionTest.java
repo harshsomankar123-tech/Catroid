@@ -23,6 +23,8 @@
 package org.catrobat.catroid.test.formulaeditor.parser;
 
 import org.catrobat.catroid.formulaeditor.FormulaElement;
+import org.catrobat.catroid.formulaeditor.evaluation.FormulaEvaluator;
+
 import org.catrobat.catroid.formulaeditor.Functions;
 import org.catrobat.catroid.formulaeditor.InternFormulaParser;
 import org.catrobat.catroid.formulaeditor.InternToken;
@@ -59,7 +61,7 @@ public class ParserFunctionTest {
 		FormulaElement parseTree = new InternFormulaParser(internTokenList).parseFormula(null);
 
 		assertNotNull(parseTree);
-		assertEquals(Math.PI, parseTree.interpretRecursive(null));
+		assertEquals(Math.PI, FormulaEvaluator.interpretRecursive(parseTree, null));
 	}
 
 	@Test
@@ -74,7 +76,7 @@ public class ParserFunctionTest {
 		FormulaElement parseTree = new InternFormulaParser(internTokenList).parseFormula(null);
 
 		assertNotNull(parseTree);
-		Double result = (Double) parseTree.interpretRecursive(null);
+		Double result = (Double) FormulaEvaluator.interpretRecursive(parseTree, null);
 		assertThat(result, is(anyOf(equalTo(0d), equalTo(1d))));
 	}
 
@@ -99,7 +101,7 @@ public class ParserFunctionTest {
 		FormulaElement parseTree = new InternFormulaParser(internTokenList).parseFormula(null);
 
 		assertNotNull(parseTree);
-		assertEquals(1.0, parseTree.interpretRecursive(null));
+		assertEquals(1.0, FormulaEvaluator.interpretRecursive(parseTree, null));
 	}
 
 	@Test
@@ -109,7 +111,7 @@ public class ParserFunctionTest {
 		FormulaElement parseTree = new InternFormulaParser(internTokenList).parseFormula(null);
 
 		assertNotNull(parseTree);
-		assertEquals(0.0, parseTree.interpretRecursive(null));
+		assertEquals(0.0, FormulaEvaluator.interpretRecursive(parseTree, null));
 	}
 
 	@Test

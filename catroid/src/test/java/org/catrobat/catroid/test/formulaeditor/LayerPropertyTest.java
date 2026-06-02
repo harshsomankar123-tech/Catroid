@@ -32,6 +32,8 @@ import org.catrobat.catroid.content.Project;
 import org.catrobat.catroid.content.Scope;
 import org.catrobat.catroid.content.Sprite;
 import org.catrobat.catroid.formulaeditor.FormulaElement;
+import org.catrobat.catroid.formulaeditor.evaluation.FormulaEvaluator;
+
 import org.catrobat.catroid.formulaeditor.Sensors;
 import org.catrobat.catroid.test.MockUtil;
 import org.junit.Before;
@@ -70,14 +72,14 @@ public class LayerPropertyTest {
 	@Test
 	public void testBackgroundLayerPropertyNoZIndex() {
 		FormulaElement layerElement = new FormulaElement(FormulaElement.ElementType.SENSOR, Sensors.OBJECT_LAYER.name(), null);
-		assertEquals(0d, layerElement.interpretRecursive(backgroundScope));
+		assertEquals(0d, FormulaEvaluator.interpretRecursive(layerElement, backgroundScope));
 	}
 
 	@Test
 	public void testSpritesLayerPropertyNoZIndex() {
 		FormulaElement layerElement = new FormulaElement(FormulaElement.ElementType.SENSOR, Sensors.OBJECT_LAYER.name(), null);
-		assertEquals(1d, layerElement.interpretRecursive(firstScope));
-		assertEquals(2d, layerElement.interpretRecursive(secondScope));
+		assertEquals(1d, FormulaEvaluator.interpretRecursive(layerElement, firstScope));
+		assertEquals(2d, FormulaEvaluator.interpretRecursive(layerElement, secondScope));
 	}
 
 	@Test
@@ -92,8 +94,8 @@ public class LayerPropertyTest {
 		firstScope.getSprite().look = firstLook;
 		secondScope.getSprite().look = secondLook;
 
-		assertEquals(2d, layerElement.interpretRecursive(firstScope));
-		assertEquals(1d, layerElement.interpretRecursive(secondScope));
+		assertEquals(2d, FormulaEvaluator.interpretRecursive(layerElement, firstScope));
+		assertEquals(1d, FormulaEvaluator.interpretRecursive(layerElement, secondScope));
 	}
 
 	@Test
@@ -103,6 +105,6 @@ public class LayerPropertyTest {
 		Look backgroundLook = mock(Look.class);
 		when(backgroundLook.getZIndex()).thenReturn(0);
 		backgroundScope.getSprite().look = backgroundLook;
-		assertEquals(0d, layerElement.interpretRecursive(backgroundScope));
+		assertEquals(0d, FormulaEvaluator.interpretRecursive(layerElement, backgroundScope));
 	}
 }

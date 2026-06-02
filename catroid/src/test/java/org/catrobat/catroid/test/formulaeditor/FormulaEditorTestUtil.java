@@ -24,6 +24,7 @@ package org.catrobat.catroid.test.formulaeditor;
 
 import org.catrobat.catroid.content.Scope;
 import org.catrobat.catroid.formulaeditor.Formula;
+import org.catrobat.catroid.formulaeditor.evaluation.FormulaEvaluator;
 import org.catrobat.catroid.formulaeditor.FormulaElement;
 import org.catrobat.catroid.formulaeditor.Functions;
 import org.catrobat.catroid.formulaeditor.InternFormulaParser;
@@ -63,7 +64,7 @@ public final class FormulaEditorTestUtil {
 		FormulaElement parseTree = new InternFormulaParser(tokenList).parseFormula(testScope);
 
 		assertNotNull(parseTree);
-		assertEquals(expected, parseTree.interpretRecursive(testScope));
+		assertEquals(expected, FormulaEvaluator.interpretRecursive(parseTree, testScope));
 	}
 
 	public static List<InternToken> buildSingleParameterFunction(Functions function, InternTokenType firstParameter,
@@ -100,7 +101,7 @@ public final class FormulaEditorTestUtil {
 		FormulaElement parseTree = new InternFormulaParser(internTokenList).parseFormula(testScope);
 
 		assertNotNull(parseTree);
-		assertEquals(expected, parseTree.interpretRecursive(testScope));
+		assertEquals(expected, FormulaEvaluator.interpretRecursive(parseTree, testScope));
 	}
 
 	public static List<InternToken> buildDoubleParameterFunction(Functions function, InternTokenType firstParameter,
@@ -135,7 +136,7 @@ public final class FormulaEditorTestUtil {
 		FormulaElement parseTree = new InternFormulaParser(internTokenList).parseFormula(testScope);
 
 		assertNotNull(parseTree);
-		assertEquals(expected, parseTree.interpretRecursive(testScope));
+		assertEquals(expected, FormulaEvaluator.interpretRecursive(parseTree, testScope));
 	}
 
 	public static void testDoubleParameterFunction(Functions function, InternTokenType firstInternTokenType,
@@ -147,7 +148,7 @@ public final class FormulaEditorTestUtil {
 		FormulaElement parseTree = new InternFormulaParser(internTokenList).parseFormula(testScope);
 
 		assertNotNull(parseTree);
-		Double result = (double) parseTree.interpretRecursive(testScope);
+		Double result = (double) FormulaEvaluator.interpretRecursive(parseTree, testScope);
 		assertThat(result, closeTo(median, error));
 	}
 
@@ -177,7 +178,7 @@ public final class FormulaEditorTestUtil {
 		FormulaElement parseTree = new InternFormulaParser(internTokenList).parseFormula(testScope);
 
 		assertNotNull(parseTree);
-		assertEquals(expected, parseTree.interpretRecursive(testScope));
+		assertEquals(expected, FormulaEvaluator.interpretRecursive(parseTree, testScope));
 	}
 
 	public static List<InternToken> buildTripleParameterFunction(Functions function,
@@ -228,7 +229,7 @@ public final class FormulaEditorTestUtil {
 		FormulaElement parseTree = new InternFormulaParser(internTokenList).parseFormula(testScope);
 
 		assertNotNull(parseTree);
-		assertEquals(expected, parseTree.interpretRecursive(testScope));
+		assertEquals(expected, FormulaEvaluator.interpretRecursive(parseTree, testScope));
 	}
 
 	public static void testBinaryOperator(InternTokenType firstInternTokenType, String firstOperand,
@@ -239,7 +240,7 @@ public final class FormulaEditorTestUtil {
 		FormulaElement parseTree = new InternFormulaParser(internTokenList).parseFormula(testScope);
 
 		assertNotNull(parseTree);
-		assertEquals(expected, parseTree.interpretRecursive(testScope));
+		assertEquals(expected, FormulaEvaluator.interpretRecursive(parseTree, testScope));
 	}
 
 	public static void testBinaryOperator(List<InternToken> firstOperand, Operators operatorType,
@@ -248,7 +249,7 @@ public final class FormulaEditorTestUtil {
 		FormulaElement parseTree = new InternFormulaParser(internTokenList).parseFormula(testScope);
 
 		assertNotNull(parseTree);
-		assertEquals(expected, parseTree.interpretRecursive(testScope));
+		assertEquals(expected, FormulaEvaluator.interpretRecursive(parseTree, testScope));
 	}
 
 	public static void testBinaryOperator(List<InternToken> firstOperand, Operators operatorType,
@@ -257,7 +258,7 @@ public final class FormulaEditorTestUtil {
 		FormulaElement parseTree = new InternFormulaParser(internTokenList).parseFormula(testScope);
 
 		assertNotNull(parseTree);
-		assertEquals(expected, parseTree.interpretRecursive(testScope));
+		assertEquals(expected, FormulaEvaluator.interpretRecursive(parseTree, testScope));
 	}
 
 	public static void testSingleParameterFunction(Functions function, InternTokenType firstInternTokenType,

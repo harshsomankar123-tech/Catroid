@@ -28,6 +28,7 @@ import org.catrobat.catroid.CatroidApplication;
 import org.catrobat.catroid.ProjectManager;
 import org.catrobat.catroid.content.Scope;
 import org.catrobat.catroid.formulaeditor.FormulaElement.ElementType;
+import org.catrobat.catroid.formulaeditor.evaluation.FormulaEvaluator;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
@@ -151,7 +152,7 @@ public class Formula implements Serializable {
 
 	@NotNull
 	private Double interpretDoubleInternal(Scope scope) {
-		Object o = formulaTree.interpretRecursive(scope);
+		Object o = FormulaEvaluator.interpretRecursive(formulaTree, scope);
 		Double doubleReturnValue;
 		if (o instanceof String) {
 			doubleReturnValue = Double.valueOf((String) o);
@@ -173,7 +174,7 @@ public class Formula implements Serializable {
 	}
 
 	public String interpretString(Scope scope) throws InterpretationException {
-		Object interpretation = formulaTree.interpretRecursive(scope);
+		Object interpretation = FormulaEvaluator.interpretRecursive(formulaTree, scope);
 
 		if (interpretation instanceof Double && ((Double) interpretation).isNaN()) {
 			throw new InterpretationException("NaN in interpretString()");
@@ -184,7 +185,7 @@ public class Formula implements Serializable {
 	}
 
 	public Object interpretObject(Scope scope) {
-		return formulaTree.interpretRecursive(scope);
+		return FormulaEvaluator.interpretRecursive(formulaTree, scope);
 	}
 
 	public void setRoot(FormulaElement formula) {

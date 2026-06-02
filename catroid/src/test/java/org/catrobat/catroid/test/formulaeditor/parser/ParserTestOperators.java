@@ -24,6 +24,8 @@ package org.catrobat.catroid.test.formulaeditor.parser;
 
 import org.catrobat.catroid.content.Scope;
 import org.catrobat.catroid.formulaeditor.FormulaElement;
+import org.catrobat.catroid.formulaeditor.evaluation.FormulaEvaluator;
+
 import org.catrobat.catroid.formulaeditor.FormulaElement.ElementType;
 import org.catrobat.catroid.formulaeditor.Functions;
 import org.catrobat.catroid.formulaeditor.InternFormulaParser;
@@ -87,7 +89,7 @@ public class ParserTestOperators {
 		FormulaElement parseTree = internParser.parseFormula(scope);
 
 		assertNotNull(parseTree);
-		assertEquals(-42.42, parseTree.interpretRecursive(scope));
+		assertEquals(-42.42, FormulaEvaluator.interpretRecursive(parseTree, scope));
 	}
 
 	@Test
@@ -182,13 +184,13 @@ public class ParserTestOperators {
 				new FormulaElement(ElementType.NUMBER, "-0", null),
 				new FormulaElement(ElementType.NUMBER, "0", null));
 
-		assertEquals(1d, formulaElement.interpretRecursive(scope));
+		assertEquals(1d, FormulaEvaluator.interpretRecursive(formulaElement, scope));
 
 		formulaElement = new FormulaElement(ElementType.OPERATOR, Operators.EQUAL.name(), null,
 				new FormulaElement(ElementType.NUMBER, "0", null),
 				new FormulaElement(ElementType.NUMBER, "-0", null));
 
-		assertEquals(1d, formulaElement.interpretRecursive(scope));
+		assertEquals(1d, FormulaEvaluator.interpretRecursive(formulaElement, scope));
 	}
 
 	@Test
@@ -196,7 +198,7 @@ public class ParserTestOperators {
 		FormulaElement formulaElement = new FormulaElement(ElementType.OPERATOR, Operators.EQUAL.name(), null,
 				new FormulaElement(ElementType.NUMBER, String.valueOf(Double.NaN), null),
 				new FormulaElement(ElementType.NUMBER, String.valueOf(Double.NaN), null));
-		assertEquals(1d, formulaElement.interpretRecursive(scope));
+		assertEquals(1d, FormulaEvaluator.interpretRecursive(formulaElement, scope));
 	}
 
 	@Test

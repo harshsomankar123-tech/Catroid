@@ -35,6 +35,7 @@ import org.catrobat.catroid.content.Scene
 import org.catrobat.catroid.content.Scope
 import org.catrobat.catroid.content.Sprite
 import org.catrobat.catroid.formulaeditor.FormulaElement
+import org.catrobat.catroid.formulaeditor.evaluation.FormulaEvaluator
 import org.catrobat.catroid.formulaeditor.SensorHandler
 import org.catrobat.catroid.formulaeditor.Sensors
 import org.catrobat.catroid.formulaeditor.UserData
@@ -325,7 +326,7 @@ object FormulaElementOperations {
     fun tryInterpretElementRecursive(element: FormulaElement, scope: Scope?):
         Any {
         return try {
-            element.interpretRecursive(scope)
+            FormulaEvaluator.interpretRecursive(element, scope)
         } catch (numberFormatException: NumberFormatException) {
             Double.NaN
         }
