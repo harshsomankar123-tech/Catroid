@@ -122,3 +122,19 @@ jobs:
         with:
           name: ${{ inputs.calling-job }}-coverage-report
           path: catroid/build/reports/coverage/androidTest/catroid/debug/connected
+
+      - name: Stage Coverage XML for SonarQube
+        if: always()
+        run: |
+          mkdir -p coverage-xml-upload
+          if [ -f catroid/build/reports/coverage/androidTest/catroid/debug/connected/report.xml ]; then
+            cp catroid/build/reports/coverage/androidTest/catroid/debug/connected/report.xml coverage-xml-upload/report.xml
+          fi
+
+      - name: Upload Coverage XML for SonarQube
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: coverage-xml-${{inputs.calling-job}}
+          path: coverage-xml-upload/report.xml
+          if-no-files-found: warn
